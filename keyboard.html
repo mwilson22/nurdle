@@ -1,0 +1,97 @@
+<<!DOCTYPE html>
+    <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+    <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+    <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+    <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+    <html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+
+    <body onload="load();"></body>
+
+    <body>
+
+        <input id="tbInput" type="text" />
+
+        <div id="VirtualKey">
+            <input id="btn1" type="button" " />
+            <input id=" btn2" type="button" " />
+            <input id=" btn3" type="button" " />
+            <input id=" btn4" type="button" " />
+            <input id=" btn5" type="button" " />
+            <br />
+            <input id=" btn6" type="button" " />
+            <input id=" btn7" type="button" " />
+            <input id=" btn8" type="button" " />
+            <input id=" btn9" type="button" " />
+            <input id=" btn0" type="button" " />
+            <br />
+            <input id=" btn6" type="button" " />
+            <input id=" btn7" type="button" " />
+            <input id=" btn8" type="button" " />
+            <input id=" btn9" type="button" " />
+            <input id=" btn0" type="button" " />
+            <br />
+            <input id=" btn6" type="button" " />
+            <input id=" btn7" type="button" " />
+            <input id=" btn8" type="button" " />
+            <input id=" btn9" type="button" " />
+            <input id=" btn0" type="button" " />
+            <br />
+            <input id=" btn6" type="button" " />
+            <input id=" btn7" type="button" " />
+            <input id=" btn8" type="button" " />
+            <input id=" btn9" type="button" " />
+            <input id=" btn0" type="button" " />
+            <br />
+            <input id=" btn6" type="button" " />
+            <input id=" btn7" type="button" " />
+            <input id=" btn8" type="button" " />
+            <input id=" btn9" type="button" " />
+            <input id=" btn0" type="button" " />
+            <br />
+        </div>
+
+        <!--[if lt IE 7]>
+            <p class=" browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your
+                browser</a> to improve your experience.</p>
+            <![endif]-->
+
+        <script src="" async defer>
+
+            function input(e) {
+                var tbInput = document.getElementById("tbInput”);
+                tbInput.value = tbInput.value + e.value;
+            }
+
+            function del() {
+                var tbInput = document.getElementById("tbInput");
+                tbInput.value = tbInput.value.substr(0, tbInput.value.length - 1);
+            }
+
+            function load() {
+                var array = new Array();
+
+                while (array.length < 10) {
+                    var temp = Math.round(Math.random() * 9);
+                    if (!contain(array, temp)) {
+                        array.push(temp);
+                    }
+                }
+                for (i = 0; i < 10; i++) {
+                    var btn = document.getElementById("btn" + i);
+                    btn.value = array[i];
+                }
+            }
+
+        </script>
+    </body>
+
+    </html>

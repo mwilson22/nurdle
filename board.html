@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <!-- Minified version -->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+
+
+
+    <style>
+        span {
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            margin: 2px;
+            border-radius: 2px;
+            font-size: 45px;
+            text-align: center;
+            vertical-align: text-bottom;
+            background-color: #000;
+        }
+
+        .green-background {
+            background-color: #30ce72;
+        }
+
+        .yellow-background {
+            background-color: rgb(239, 239, 35)
+        }
+
+        input {
+            background-color: #bbbbbb;
+            border: none;
+            color: white;
+            padding: 15px 20px;
+            margin: 2px;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <h2></h2>
+        <div>
+            <span class="r1-c1"></span>
+            <span class="r1-c2"></span>
+            <span class="r1-c3"></span>
+            <span class="r1-c4"></span>
+            <span class="r1-c5"></span>
+        </div>
+        <div>
+            <span class="r2-c1"></span>
+            <span class="r2-c2"></span>
+            <span class="r2-c3"></span>
+            <span class="r2-c4"></span>
+            <span class="r2-c5"></span>
+        </div>
+    </div>
+
+    <script>
+        var yellowBackground = "rgb(239, 239, 35)"
+        var greenBackground = "rgb(48, 206, 114)"
+        var row = 1
+        var col = 3
+        var span_id = 'r' + row.toString() + '-' + 'c' + col.toString();
+        var spans = document.getElementsByClassName(span_id);
+        for (var i = 0; i < spans.length; i++) {
+            var span = spans[i];
+            span.style.backgroundColor = yellowBackground;
+        } 
+    </script>
+
+
+    <script>
+
+        var socket = new WebSocket('ws://localhost:8000/ws/some_url/')
+
+        socket.onmessage = function (event) {
+            var data = JSON.parse(event.data);
+            console.log(data);
+            document.getElementById('app').innerText = data.message;
+
+        }
+
+    </script>
+
+    <!-- Virtual keyboard -->
+    <div id="VirtualKey">
+        <input id="btnQ" type="button" value="Q" onclick="input(this);" />
+        <input id="btnW" type="button" value="W" onclick="input(this);" />
+        <input id="btnE" type="button" value="E" onclick="input(this);" />
+        <input id="btnR" type="button" value="R" onclick="input(this);" />
+        <input id="btnT" type="button" value="T" onclick="input(this);" />
+        <input id="btnY" type="button" value="Y" onclick="input(this);" />
+        <input id="btnU" type="button" value="U" onclick="input(this);" />
+        <input id="btnI" type="button" value="I" onclick="input(this);" />
+        <input id="btnO" type="button" value="O" onclick="input(this);" />
+        <input id="btnP" type="button" value="P" onclick="input(this)" />
+        <br />
+        <input id="btnA" type="button" value="A" onclick="input(this);" />
+        <input id="btnS" type="button" value="S" onclick="input(this);" />
+        <input id="btnD" type="button" value="D" onclick="input(this);" />
+        <input id="btnF" type="button" value="F" onclick="input(this);" />
+        <input id="btnG" type="button" value="G" onclick="input(this);" />
+        <input id="btnH" type="button" value="H" onclick="input(this);" />
+        <input id="btnJ" type="button" value="J" onclick="input(this);" />
+        <input id="btnK" type="button" value="K" onclick="input(this);" />
+        <input id="btnL" type="button" value="L" onclick="input(this);" />
+        <br />
+        <input id="btnENTER" type="button" value="Enter" onclick="enter(this);" />
+        <input id="btnZ" type="button" value="Z" onclick="input(this);" />
+        <input id="btnX" type="button" value="X" onclick="input(this);" />
+        <input id="btnC" type="button" value="C" onclick="input(this);" />
+        <input id="btnV" type="button" value="V" onclick="input(this);" />
+        <input id="btnB" type="button" value="B" onclick="input(this);" />
+        <input id="btnN" type="button" value="N" onclick="input(this);" />
+        <input id="btnM" type="button" value="M" onclick="input(this);" />
+
+        <input id="btnDel" type="button" value="⌫" onclick="del();" />
+    </div>
+
+    <script>
+
+        var round = 1
+        var wordPos = 1
+
+        function input(e) {
+            var span_class_name = 'r' + round.toString() + '-' + 'c' + wordPos.toString();
+            var spans = document.getElementsByClassName(span_class_name);
+            if (wordPos < 5) {
+                spans[0].textContent = e.value
+                wordPos += 1;
+            }
+            else {
+                if (spans[0].textContent == '') {
+                    spans[0].textContent = e.value
+                }
+            }
+        }
+
+        function del() {
+            if (wordPos > 1 && wordPos < 5) {
+                wordPos -= 1;
+            }
+            var span_class_name = 'r' + round.toString() + '-' + 'c' + wordPos.toString();
+            var spans = document.getElementsByClassName(span_class_name);
+            spans[0].textContent = ''
+
+            if (wordPos == 5) {
+                wordPos -= 1;
+            }
+        }
+
+        function enter() {
+            if (wordPos == 5) {
+                if (round < 6) {
+                    round += 1;
+                    wordPos = 1;
+                }
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
