@@ -34,27 +34,6 @@
             vertical-align: text-bottom;
             background-color: #000;
         }
-
-        .green-background {
-            background-color: #30ce72;
-        }
-
-        .yellow-background {
-            background-color: rgb(239, 239, 35)
-        }
-
-        input {
-            background-color: #bbbbbb;
-            border: none;
-            color: white;
-            padding: 15px 20px;
-            margin: 2px;
-            border-radius: 8px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-        }
     </style>
 
 </head>
@@ -77,11 +56,41 @@
             <span class="r2-c4"></span>
             <span class="r2-c5"></span>
         </div>
+        <div>
+            <span class="r3-c1"></span>
+            <span class="r3-c2"></span>
+            <span class="r3-c3"></span>
+            <span class="r3-c4"></span>
+            <span class="r3-c5"></span>
+        </div>
+        <div>
+            <span class="r4-c1"></span>
+            <span class="r4-c2"></span>
+            <span class="r4-c3"></span>
+            <span class="r4-c4"></span>
+            <span class="r4-c5"></span>
+        </div>
+        <div>
+            <span class="r5-c1"></span>
+            <span class="r5-c2"></span>
+            <span class="r5-c3"></span>
+            <span class="r5-c4"></span>
+            <span class="r5-c5"></span>
+        </div>
+        <div>
+            <span class="r6-c1"></span>
+            <span class="r6-c2"></span>
+            <span class="r6-c3"></span>
+            <span class="r6-c4"></span>
+            <span class="r6-c5"></span>
+        </div>
     </div>
 
     <script>
-        var yellowBackground = "rgb(239, 239, 35)"
-        var greenBackground = "rgb(48, 206, 114)"
+        const yellowBackground = "rgb(239, 239, 35)"
+        const greenBackground = "rgb(48, 206, 114)"
+        const greyBackground = "rgb(50, 50, 50)"
+        const blackBackground = "rgb(0, 0, 0)"
         var row = 1
         var col = 3
         var span_id = 'r' + row.toString() + '-' + 'c' + col.toString();
@@ -161,20 +170,29 @@
         }
 
         function del() {
-            if (wordPos > 1 && wordPos < 5) {
-                wordPos -= 1;
-            }
             var span_class_name = 'r' + round.toString() + '-' + 'c' + wordPos.toString();
             var spans = document.getElementsByClassName(span_class_name);
-            spans[0].textContent = ''
 
-            if (wordPos == 5) {
+            if (spans[0].textContent != '') {
+                spans[0].textContent = '';
+                return;
+            }
+
+            if (wordPos > 1) {
                 wordPos -= 1;
+                span_class_name = 'r' + round.toString() + '-' + 'c' + wordPos.toString();
+                spans = document.getElementsByClassName(span_class_name);
+                spans[0].textContent = '';
             }
         }
 
         function enter() {
             if (wordPos == 5) {
+                for (let i = 1; i < 6; i++) {
+                    span_class_name = 'r' + round.toString() + '-' + 'c' + i.toString();
+                    spans = document.getElementsByClassName(span_class_name);
+                    spans[0].style.backgroundColor = greyBackground;
+                }
                 if (round < 6) {
                     round += 1;
                     wordPos = 1;
