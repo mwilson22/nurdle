@@ -1,15 +1,10 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="">
@@ -20,19 +15,28 @@
     <!-- Minified version -->
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
 
-
-
     <style>
         span {
-            display: inline-block;
-            width: 70px;
-            height: 70px;
-            margin: 2px;
-            border-radius: 2px;
-            font-size: 45px;
+            display: inline-table;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            margin: 3px;
+            border-radius: 3px;
+            font-size: 30px;
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
             text-align: center;
-            vertical-align: text-bottom;
+            vertical-align: bottom;
+            text-transform: uppercase;
             background-color: #000;
+        }
+
+        div {
+            margin: auto;
+            text-align: center;
         }
     </style>
 
@@ -40,7 +44,7 @@
 
 <body>
 
-    <div class="container">
+    <div class="container" , id="game-board">
         <h2></h2>
         <div>
             <span class="r1-c1"></span>
@@ -93,11 +97,11 @@
         const blackBackground = "rgb(0, 0, 0)"
         var row = 1
         var col = 3
-        var span_id = 'r' + row.toString() + '-' + 'c' + col.toString();
-        var spans = document.getElementsByClassName(span_id);
-        for (var i = 0; i < spans.length; i++) {
-            var span = spans[i];
-            span.style.backgroundColor = yellowBackground;
+        var tile_id = 'r' + row.toString() + '-' + 'c' + col.toString();
+        var tiles = document.getElementsByClassName(tile_id);
+        for (var i = 0; i < tiles.length; i++) {
+            var tile = tiles[i];
+            tile.style.backgroundColor = yellowBackground;
         } 
     </script>
 
@@ -116,7 +120,7 @@
     </script>
 
     <!-- Virtual keyboard -->
-    <div id="VirtualKey">
+    <div id="VirtualKey" , margin="auto">
         <input id="btnQ" type="button" value="Q" onclick="input(this);" />
         <input id="btnW" type="button" value="W" onclick="input(this);" />
         <input id="btnE" type="button" value="E" onclick="input(this);" />
@@ -156,42 +160,42 @@
         var wordPos = 1
 
         function input(e) {
-            var span_class_name = 'r' + round.toString() + '-' + 'c' + wordPos.toString();
-            var spans = document.getElementsByClassName(span_class_name);
+            var tile_class_name = 'r' + round.toString() + '-' + 'c' + wordPos.toString();
+            var tiles = document.getElementsByClassName(tile_class_name);
             if (wordPos < 5) {
-                spans[0].textContent = e.value
+                tiles[0].textContent = e.value
                 wordPos += 1;
             }
             else {
-                if (spans[0].textContent == '') {
-                    spans[0].textContent = e.value
+                if (tiles[0].textContent == '') {
+                    tiles[0].textContent = e.value
                 }
             }
         }
 
         function del() {
-            var span_class_name = 'r' + round.toString() + '-' + 'c' + wordPos.toString();
-            var spans = document.getElementsByClassName(span_class_name);
+            var tile_class_name = 'r' + round.toString() + '-' + 'c' + wordPos.toString();
+            var tiles = document.getElementsByClassName(tile_class_name);
 
-            if (spans[0].textContent != '') {
-                spans[0].textContent = '';
+            if (tiles[0].textContent != '') {
+                tiles[0].textContent = '';
                 return;
             }
 
             if (wordPos > 1) {
                 wordPos -= 1;
-                span_class_name = 'r' + round.toString() + '-' + 'c' + wordPos.toString();
-                spans = document.getElementsByClassName(span_class_name);
-                spans[0].textContent = '';
+                tile_class_name = 'r' + round.toString() + '-' + 'c' + wordPos.toString();
+                tiles = document.getElementsByClassName(tile_class_name);
+                tiles[0].textContent = '';
             }
         }
 
         function enter() {
             if (wordPos == 5) {
                 for (let i = 1; i < 6; i++) {
-                    span_class_name = 'r' + round.toString() + '-' + 'c' + i.toString();
-                    spans = document.getElementsByClassName(span_class_name);
-                    spans[0].style.backgroundColor = greyBackground;
+                    tile_class_name = 'r' + round.toString() + '-' + 'c' + i.toString();
+                    tiles = document.getElementsByClassName(tile_class_name);
+                    tiles[0].style.backgroundColor = greyBackground;
                 }
                 if (round < 6) {
                     round += 1;
