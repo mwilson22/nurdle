@@ -1,5 +1,5 @@
 import random
-from nurdle_app.game.display import *
+
 
 GREEN = '0'
 YELLOW = '1'
