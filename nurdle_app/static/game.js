@@ -15,6 +15,21 @@ socket.onmessage = function (event) {
 }
 
 
+function checkGuess(guess) {
+    console.log("Fetching guess-check.");
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/check_guess/", true);
+    xhr.onload = () => {
+        updateDisplay(xhr.response);
+    };
+    xhr.send(guess);
+}
+
+function updateDisplay(data) {
+    alert(data);
+}
+
+
 var round = 1
 var wordPos = 1
 
@@ -58,11 +73,14 @@ function del() {
 
 // Handle enter key
 function enter() {
+    var guess = "";
     if (wordPos == 5 && get_tile(round, wordPos).textContent != '') {
         for (let i = 1; i < 6; i++) {
             var tile = get_tile(round, i);
             tile.style.backgroundColor = greyBackground;
+            guess = guess + tile.textContent;
         }
+        checkGuess(guess)
         if (round < 6) {
             round += 1;
             wordPos = 1;
