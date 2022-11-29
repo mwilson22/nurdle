@@ -1,13 +1,13 @@
 import random
-from display import *
+from nurdle_app.game.display import *
 
-GREEN = TextCols.OKGREEN
-YELLOW = TextCols.WARNING
-WHITE = TextCols.ENDC
+GREEN = '0'
+YELLOW = '1'
+WHITE = '2'
 
 
 def word_in_file(in_word):
-    f = open('words.txt')
+    f = open('nurdle_app/game/words.txt')
 
     word = in_word.lower()
 
@@ -19,7 +19,7 @@ def word_in_file(in_word):
 
 
 def get_random_word():
-    f = open('words.txt')
+    f = open('nurdle_app/game/words.txt')
     # Read in the file once and build a list of line offsets
     line_offset = []
     offset = 0
@@ -35,40 +35,36 @@ def get_random_word():
         word = f.readline()
         if len(word) == 6:  # 5 letter words only
             break
-    return word
+
+    return word.upper()[:-1]
 
 
-word = get_random_word().upper()[:-1]
-print(word)
+current_word = ''
 
 
-for attempt in range(6):
-    while True:
-        guess = input(f"\nGuess {attempt+1}: ").upper()
-        if len(guess) == 5:
-            if word_in_file(guess):
-                break
-            else:
-                print("Word not in list")
-        else:
-            print("5 letters")
+def correct_guess(guess):
+    if guess == current_word:
+        return True
 
-    temp_word = list(word)
+    return False
 
-    if guess == word:
-        print(GREEN + guess + WHITE)
-        print("You win!")
-        exit()
+
+def mark_guess(guess):
+    temp_word = list(current_word)
+
+    if correct_guess(guess):
+        letter_colours = GREEN * 5
+        return letter_colours
 
     letter_colours = [None] * 5
 
-    for i in range(len(word)):
+    for i in range(len(current_word)):
         # Correct letter correct place
-        if guess[i] == word[i]:
+        if guess[i] == current_word[i]:
             letter_colours[i] = GREEN
             temp_word[i] = ' '
 
-    for i in range(len(word)):
+    for i in range(len(current_word)):
         # Correct letter wrong place
         if guess[i] in temp_word:
             letter_colours[i] = YELLOW
@@ -82,6 +78,9 @@ for attempt in range(6):
         elif letter_colours[i] == None:
             letter_colours[i] = WHITE
 
-    # Print the guess with the correct letter colours
-    for i in range(len(word)):
-        print(letter_colours[i] + guess[i] + WHITE, end='')
+    return letter_colours
+
+
+def init_word():
+    global current_word
+    current_word = get_random_word()

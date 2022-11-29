@@ -1,9 +1,14 @@
 'use strict';
 
-const yellowBackground = "rgb(239, 239, 35)"
+const yellowBackground = "rgb(200, 200, 35)"
 const greenBackground = "rgb(48, 206, 114)"
 const greyBackground = "rgb(50, 50, 50)"
 const blackBackground = "rgb(0, 0, 0)"
+const darkGreyBackground = "rgb(30, 30 ,30)"
+
+const correctPlace = '0'
+const wrongPlace = '1'
+const wrongLetter = '2'
 
 var socket = new WebSocket('ws://localhost:8000/ws/some_url/')
 
@@ -15,34 +20,97 @@ socket.onmessage = function (event) {
 }
 
 
+function initWord() {
+    console.log("Fetching guess-check.");
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/check_guess/", false);
+    xhr.send("0init");
+}
+
+
 function checkGuess(guess) {
     console.log("Fetching guess-check.");
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/check_guess/", true);
     xhr.onload = () => {
         updateDisplay(xhr.response);
-    };
+    }
     xhr.send(guess);
 }
 
-function updateDisplay(data) {
-    alert(data);
-}
 
-
-var round = 1
-var wordPos = 1
-
-function get_tile(row, col) {
+function getTile(row, col) {
     var tile_class_name = 'r' + row.toString() + '-' + 'c' + col.toString();
     var tiles = document.getElementsByClassName(tile_class_name);
 
     return tiles[0];
 }
 
+function getButton(letter) {
+    var button_id = 'btn' + letter;
+    var button = document.getElementById(button_id);
+
+    return button;
+}
+
+
+function setTileColour(tile, colour) {
+    tile.style.backgroundColor = colour;
+}
+
+function setButtonColour(letter, colour) {
+    var button = getButton(letter);
+    button.style.backgroundColor = colour;
+}
+
+
+var round = 1
+var wordPos = 1
+
+
+function updateDisplay(data) {
+    var tile;
+    var col;
+    var data_dict = JSON.parse(data);
+
+    if (!data_dict["is a word"]) {
+        alert("Word is not in list");
+        round -= 1;
+        wordPos = 5;
+        return;
+    }
+
+    for (let i = 1; i < 6; i++) {
+        tile = getTile(round - 1, i);
+        switch (data_dict["result"][i - 1]) {
+            case '0':
+                col = greenBackground;
+                setButtonColour(tile.textContent, col);
+                break;
+            case '1':
+                col = yellowBackground;
+                setButtonColour(tile.textContent, col);
+                break;
+            case '2':
+                col = greyBackground;
+                setButtonColour(tile.textContent, greyBackground);
+                break;
+            default:
+                break;
+        }
+        setTileColour(tile, col);
+    }
+
+    if (data_dict["correct"]) {
+        alert("You win!");
+        round = 6;  // End the game
+    }
+}
+
+
 // Handle letter keypress
 function input(e) {
-    var tile = get_tile(round, wordPos);
+    var tile = getTile(round, wordPos);
 
     if (wordPos < 5) {
         tile.textContent = e.value
@@ -57,7 +125,7 @@ function input(e) {
 
 // Handle delete key
 function del() {
-    var tile = get_tile(round, wordPos);
+    var tile = getTile(round, wordPos);
 
     if (tile.textContent != '') {
         tile.textContent = '';
@@ -66,7 +134,7 @@ function del() {
 
     if (wordPos > 1) {
         wordPos -= 1;
-        tile = get_tile(round, wordPos);
+        tile = getTile(round, wordPos);
         tile.textContent = '';
     }
 }
@@ -74,16 +142,20 @@ function del() {
 // Handle enter key
 function enter() {
     var guess = "";
-    if (wordPos == 5 && get_tile(round, wordPos).textContent != '') {
+    if (wordPos == 5 && getTile(round, wordPos).textContent != '') {
         for (let i = 1; i < 6; i++) {
-            var tile = get_tile(round, i);
-            tile.style.backgroundColor = greyBackground;
+            var tile = getTile(round, i);
             guess = guess + tile.textContent;
         }
-        checkGuess(guess)
-        if (round < 6) {
-            round += 1;
-            wordPos = 1;
+
+        if (round == 1) {
+            // Initialise a new word
+            initWord()
         }
+
+        round += 1;
+        wordPos = 1;
+
+        checkGuess(guess)
     }
 }
