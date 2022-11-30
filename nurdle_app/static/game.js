@@ -10,7 +10,7 @@ const correctPlace = '0'
 const wrongPlace = '1'
 const wrongLetter = '2'
 
-var socket = new WebSocket('ws://localhost:8000/ws/some_url/')
+// var socket = new WebSocket('ws://localhost:8000/ws/some_url/')
 
 socket.onmessage = function (event) {
     var data = JSON.parse(event.data);
