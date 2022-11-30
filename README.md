@@ -1,6 +1,6 @@
 # Nurdle Demo
 
-Wordle wannabe runs from a docker container using simple POST request and response
+Wordle wannabe that can run from a docker container. Javascript front end uses aynchronous and synchronous POST request and response to talk to the Python game engine via a Django server.
 
 ## Contents
 * [How to use](#how-to-use)

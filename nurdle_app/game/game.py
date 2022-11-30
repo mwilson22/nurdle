@@ -6,6 +6,7 @@ YELLOW = '1'
 WHITE = '2'
 
 
+# Check if the word exists in the words file
 def word_in_file(in_word):
     f = open('nurdle_app/game/words.txt')
 
