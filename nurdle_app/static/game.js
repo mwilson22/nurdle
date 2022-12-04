@@ -83,6 +83,8 @@ var round = 1
 // Which letter is 'next'
 var wordPos = 1
 
+// ID for interval timer
+var greenInterval;
 
 function updateDisplay(data) {
     var tile;
@@ -100,41 +102,54 @@ function updateDisplay(data) {
         return;
     }
 
-    for (let i = 1; i < 6; i++) {
-        tile = getTile(round - 1, i);
-        switch (data_dict["result"][i - 1]) {
-            case '0':
-                col = greenBackground;
-                setButtonColour(tile.textContent, col);
-                break;
-            case '1':
-                col = yellowBackground;
-                if (getButtonColour(tile.textContent) != greenBackground) {
-                    setButtonColour(tile.textContent, col);
-                }
-                break;
-            case '2':
-                col = greyBackground;
-                if (getButtonColour(tile.textContent) != greenBackground && getButtonColour(tile.textContent) != yellowBackground) {
-                    setButtonColour(tile.textContent, col);
-                }
-                break;
-            default:
-                break;
-        }
-        setTileColour(tile, col);
-    }
-
     if (data_dict["correct"]) {
-        var modal = document.getElementById("youWinModal");
-        modal.style.display = "block";
+        var pos = 1;
+        greenInterval = setInterval(function () {
+            tile = getTile(round - 1, pos);
+            setTileColour(tile, greenBackground);
 
-        round = 6;  // End the game
+            pos += 1;
+            if (pos == 6) {
+                clearInterval(greenInterval);
+
+                setTimeout(function () {
+                    var modal = document.getElementById("youWinModal");
+                    modal.style.display = "block";
+                }, 400);
+
+                round = 7;  // End the game
+            }
+        }, 250, pos, round);
+    } else {
+        for (let i = 1; i < 6; i++) {
+            tile = getTile(round - 1, i);
+            switch (data_dict["result"][i - 1]) {
+                case '0':
+                    col = greenBackground;
+                    setButtonColour(tile.textContent, col);
+                    break;
+                case '1':
+                    col = yellowBackground;
+                    if (getButtonColour(tile.textContent) != greenBackground) {
+                        setButtonColour(tile.textContent, col);
+                    }
+                    break;
+                case '2':
+                    col = greyBackground;
+                    if (getButtonColour(tile.textContent) != greenBackground && getButtonColour(tile.textContent) != yellowBackground) {
+                        setButtonColour(tile.textContent, col);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            setTileColour(tile, col);
+        }
+        if (round == 7) {
+            alert("Bad luck! Word was " + currentWord)
+        }
     }
 
-    if (round == 7) {
-        alert("Bad luck! Word was " + currentWord)
-    }
 }
 
 
