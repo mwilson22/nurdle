@@ -27,6 +27,7 @@ def check_guess(request):
     data = {
         "is a word": word_in_file(guess),
         "correct": correct_guess(guess),
-        "result": letter_colours
+        "result": letter_colours,
+        "current word": get_current_word()
     }
     return JsonResponse(data)

@@ -43,7 +43,7 @@ $ python manage.py runserver
 # Notes
 To serve from a Mac and view on a phone:
 
-- Find your <span style="color:red">mac-ip-address</span> using `ipconfig getifaddr en1`
-- In settings.py add `ALLOWED_HOSTS = `['<span style="color:red">mac-ip-address</span>'`, 'localhost', '127.0.0.1']`
+- Find your <span style="color:rgb(167, 130, 130)">mac-ip-address</span> using `ipconfig getifaddr en1`
+- In settings.py add `ALLOWED_HOSTS = `['<span style="color:rgb(167, 130, 130)">mac-ip-address</span>'`, 'localhost', '127.0.0.1']`
 - `python manage.py runserver 0.0.0.0:8000`
-- On the phone go to <span style="color:red">mac-ip-address</span>`:8000`
+- On the phone go to <span style="color:rgb(167, 130, 130)">mac-ip-address</span>`:8000`

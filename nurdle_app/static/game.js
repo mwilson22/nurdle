@@ -21,6 +21,14 @@ socket.onmessage = function (event) {
 }
 */
 
+function isTouchDevice() {
+    return (('ontouchstart' in window) ||
+        (navigator.maxTouchPoints > 0) ||
+        (navigator.msMaxTouchPoints > 0));
+}
+
+var currentWord;
+
 function initWord() {
     console.log("Fetching guess-check.");
     const xhr = new XMLHttpRequest();
@@ -81,6 +89,8 @@ function updateDisplay(data) {
     var col;
     var data_dict = JSON.parse(data);
 
+    currentWord = data_dict["current word"];
+
     if (!data_dict["is a word"]) {
         var modal = document.getElementById("notInListModal");
         modal.style.display = "block";
@@ -121,11 +131,15 @@ function updateDisplay(data) {
 
         round = 6;  // End the game
     }
+
+    if (round == 7) {
+        alert("Bad luck! Word was " + currentWord)
+    }
 }
 
 
 // Handle letter keypress
-function input(e) {
+function handleKeyPress(e) {
     var tile = getTile(round, wordPos);
 
     if (wordPos < 5) {
@@ -137,6 +151,14 @@ function input(e) {
             tile.textContent = e.value
         }
     }
+}
+function input(e) {
+    if (!isTouchDevice()) {
+        handleKeyPress(e);
+    }
+}
+function touch(e) {
+    handleKeyPress(e);
 }
 
 // Handle delete key

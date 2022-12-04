@@ -29,6 +29,8 @@ div {
 input[type="button"] {
     background-color: darkgrey;
     color: white;
+    /* Prevent double-tap zooming on buttons */
+    touch-action: manipulation;
 }
 
 

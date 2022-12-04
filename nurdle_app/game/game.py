@@ -43,6 +43,10 @@ def get_random_word():
 current_word = ''
 
 
+def get_current_word():
+    return current_word
+
+
 def correct_guess(guess):
     if guess == current_word:
         return True
