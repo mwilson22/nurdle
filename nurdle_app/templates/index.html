@@ -3,6 +3,7 @@
 <html>
 
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
@@ -15,7 +16,6 @@
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
 
     <link rel="stylesheet" href="../static/board.css">
-
 
 </head>
 
@@ -104,7 +104,76 @@
         <input id="btnDel" type="button" value="⌫" onclick="del();" />
     </div>
 
+
     <script src="../static/game.js"></script>
+
+
+
+
+    <!-- The Modals -->
+    <div id="notInListModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="closeNotIn" display="inline-block" height="8px">&times;</div>
+            </div>
+            <div class="modal-body">
+                Word not in list
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+
+    </div>
+    <style>
+        .green {
+            background-color: #5cb85c
+        }
+    </style>
+    <div id="youWinModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="closeWin" display="inline-block" height="8px">&times;</div>
+            </div>
+            <div class="modal-body">
+                <div class="green">You win!</div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+
+    </div>
+    <script>
+        // Get the modals
+        var modalWin = document.getElementById("youWinModal");
+        var modalNotIn = document.getElementById("notInListModal");
+
+        // Get the <span> element that closes the modal
+        var spanNotIn = document.getElementsByClassName("closeNotIn")[0];
+        var spanWin = document.getElementsByClassName("closeWin")[0];
+
+
+        // When the user clicks on <span> (x), close the modal
+        spanNotIn.onclick = function () {
+            modalNotIn.style.display = "none";
+        }
+        spanWin.onclick = function () {
+            modalWin.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modalNotIn) {
+                modalNotIn.style.display = "none";
+            }
+            if (event.target == modalWin) {
+                modalWin.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 

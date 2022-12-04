@@ -10,15 +10,16 @@ const correctPlace = '0'
 const wrongPlace = '1'
 const wrongLetter = '2'
 
-// var socket = new WebSocket('ws://localhost:8000/ws/some_url/')
+// Sockets not used in this version
+/*
+var socket = new WebSocket('ws://localhost:8000/ws/some_url/')
 
 socket.onmessage = function (event) {
     var data = JSON.parse(event.data);
     console.log(data);
     document.getElementById('app').innerText = data.message;
-
 }
-
+*/
 
 function initWord() {
     console.log("Fetching guess-check.");
@@ -39,6 +40,7 @@ function checkGuess(guess) {
 }
 
 
+// Find the game tile based on which round and which letter the player is on
 function getTile(row, col) {
     var tile_class_name = 'r' + row.toString() + '-' + 'c' + col.toString();
     var tiles = document.getElementsByClassName(tile_class_name);
@@ -63,8 +65,14 @@ function setButtonColour(letter, colour) {
     button.style.backgroundColor = colour;
 }
 
+function getButtonColour(letter) {
+    var button = getButton(letter);
+    return button.style.backgroundColor;
+}
 
+// Which game round the player is on
 var round = 1
+// Which letter is 'next'
 var wordPos = 1
 
 
@@ -74,7 +82,9 @@ function updateDisplay(data) {
     var data_dict = JSON.parse(data);
 
     if (!data_dict["is a word"]) {
-        alert("Word is not in list");
+        var modal = document.getElementById("notInListModal");
+        modal.style.display = "block";
+
         round -= 1;
         wordPos = 5;
         return;
@@ -89,11 +99,15 @@ function updateDisplay(data) {
                 break;
             case '1':
                 col = yellowBackground;
-                setButtonColour(tile.textContent, col);
+                if (getButtonColour(tile.textContent) != greenBackground) {
+                    setButtonColour(tile.textContent, col);
+                }
                 break;
             case '2':
                 col = greyBackground;
-                setButtonColour(tile.textContent, greyBackground);
+                if (getButtonColour(tile.textContent) != greenBackground && getButtonColour(tile.textContent) != yellowBackground) {
+                    setButtonColour(tile.textContent, col);
+                }
                 break;
             default:
                 break;
@@ -102,7 +116,9 @@ function updateDisplay(data) {
     }
 
     if (data_dict["correct"]) {
-        alert("You win!");
+        var modal = document.getElementById("youWinModal");
+        modal.style.display = "block";
+
         round = 6;  // End the game
     }
 }
@@ -159,3 +175,16 @@ function enter() {
         checkGuess(guess)
     }
 }
+
+
+// Handle keypresses
+document.addEventListener('keydown', function (event) {
+    // Trigger the button element with a click
+    event.preventDefault();
+    if (event.key == "Backspace") {
+        del();
+    }
+    else {
+        getButton(event.key.toUpperCase()).click();
+    }
+});
