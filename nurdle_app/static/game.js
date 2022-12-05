@@ -84,6 +84,10 @@ function updateDisplay(data) {
     // Word not in list
     if (!data_dict["is a word"]) {
         var modal = document.getElementById("notInListModal");
+
+        modal.onanimationend = () => {
+            modal.style.display = "none";
+        };
         modal.style.display = "block";
 
         round -= 1;
@@ -125,6 +129,10 @@ function updateDisplay(data) {
             if (data_dict["correct"]) {
                 setTimeout(function () {
                     var modal = document.getElementById("youWinModal");
+
+                    modal.onanimationend = () => {
+                        modal.style.display = "none";
+                    };
                     modal.style.display = "block";
                 }, 300);
 
@@ -133,7 +141,16 @@ function updateDisplay(data) {
             else {
                 // We have a loser :o(
                 if (round == 7) {
-                    alert("Bad luck! Word was " + currentWord)
+                    var messageDiv = document.getElementById("notinlist");
+                    var modal = document.getElementById("notInListModal");
+
+                    modal.style.animationDuration = 3;
+                    messageDiv.textContent = "Bad luck. Word was " + currentWord;
+
+                    modal.onanimationend = () => {
+                        modal.style.display = "none";
+                    };
+                    modal.style.display = "block";
                 }
             }
         }

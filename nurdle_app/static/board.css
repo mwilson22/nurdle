@@ -42,18 +42,13 @@ input[type="button"] {
 .modal {
     /* Hidden by default */
     display: none;
-    /* Stay in place */
-    position: fixed;
+    position: relative;
     /* Sit on top */
     z-index: 1;
     /* Location of the box */
     padding-top: 10px;
-    left: 5%;
-    top: 5;
-    width: 90%;
-    height: 100%;
-    /* Enable scroll if needed */
-    overflow: auto;
+    width: auto;
+    height: 20%;
     /* Fallback color */
     background-color: rgb(0, 0, 0);
     /* Black w/ opacity */
@@ -64,15 +59,19 @@ input[type="button"] {
 .modal-content {
     position: relative;
     background-color: #fefefe;
-    margin: auto;
+    margin-top: auto;
     padding: 0;
     border: 1px solid #888;
     width: 80%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     -webkit-animation-name: animatetop;
-    -webkit-animation-duration: 0.4s;
+    -webkit-animation-duration: 0.9s;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-iteration-count: 2;
     animation-name: animatetop;
-    animation-duration: 0.4s
+    animation-direction: alternate;
+    animation-iteration-count: 2;
+    animation-duration: 0.9s
 }
 
 .youwin {
@@ -81,34 +80,37 @@ input[type="button"] {
 
 /* Add Animation */
 @-webkit-keyframes animatetop {
-    from {
-        top: -300px;
+    0% {
+        top: -800px;
         opacity: 0
     }
 
-    to {
-        top: 0;
+    50% {
+        top: -600px;
+        opacity: 1
+    }
+
+    100% {
+        top: -600px;
         opacity: 1
     }
 }
 
 @keyframes animatetop {
-    from {
-        top: -300px;
+    0% {
+        top: -800px;
         opacity: 0
     }
 
-    to {
-        top: 0;
+    50% {
+        top: -600px;
         opacity: 1
     }
-}
 
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+    100% {
+        top: -600px;
+        opacity: 1
+    }
 }
 
 .modal-header {
