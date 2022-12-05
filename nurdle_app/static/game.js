@@ -10,16 +10,11 @@ const correctPlace = '0'
 const wrongPlace = '1'
 const wrongLetter = '2'
 
-// Sockets not used in this version
-/*
-var socket = new WebSocket('ws://localhost:8000/ws/some_url/')
+var currentWord;    // Word the user is trying to guess
+var round = 1       // Which game round the player is on
+var wordPos = 1     // Which letter is 'next'
+var greenInterval;  // ID for interval timer
 
-socket.onmessage = function (event) {
-    var data = JSON.parse(event.data);
-    console.log(data);
-    document.getElementById('app').innerText = data.message;
-}
-*/
 
 function isTouchDevice() {
     return (('ontouchstart' in window) ||
@@ -27,7 +22,6 @@ function isTouchDevice() {
         (navigator.msMaxTouchPoints > 0));
 }
 
-var currentWord;
 
 function initWord() {
     console.log("Fetching guess-check.");
@@ -56,6 +50,10 @@ function getTile(row, col) {
     return tiles[0];
 }
 
+function setTileColour(tile, colour) {
+    tile.style.backgroundColor = colour;
+}
+
 function getButton(letter) {
     var button_id = 'btn' + letter;
     var button = document.getElementById(button_id);
@@ -63,9 +61,9 @@ function getButton(letter) {
     return button;
 }
 
-
-function setTileColour(tile, colour) {
-    tile.style.backgroundColor = colour;
+function getButtonColour(letter) {
+    var button = getButton(letter);
+    return button.style.backgroundColor;
 }
 
 function setButtonColour(letter, colour) {
@@ -73,26 +71,17 @@ function setButtonColour(letter, colour) {
     button.style.backgroundColor = colour;
 }
 
-function getButtonColour(letter) {
-    var button = getButton(letter);
-    return button.style.backgroundColor;
-}
 
-// Which game round the player is on
-var round = 1
-// Which letter is 'next'
-var wordPos = 1
-
-// ID for interval timer
-var greenInterval;
-
+// Show the result for this guess
 function updateDisplay(data) {
     var tile;
     var col;
     var data_dict = JSON.parse(data);
+    var pos = 1;
 
     currentWord = data_dict["current word"];
 
+    // Word not in list
     if (!data_dict["is a word"]) {
         var modal = document.getElementById("notInListModal");
         modal.style.display = "block";
@@ -102,54 +91,53 @@ function updateDisplay(data) {
         return;
     }
 
-    if (data_dict["correct"]) {
-        var pos = 1;
-        greenInterval = setInterval(function () {
-            tile = getTile(round - 1, pos);
-            setTileColour(tile, greenBackground);
+    // Display the result for this guess
+    greenInterval = setInterval(function () {
+        tile = getTile(round - 1, pos);
+        switch (data_dict["result"][pos - 1]) {
+            case '0':
+                col = greenBackground;
+                setButtonColour(tile.textContent, col);
+                break;
+            case '1':
+                col = yellowBackground;
+                if (getButtonColour(tile.textContent) != greenBackground) {
+                    setButtonColour(tile.textContent, col);
+                }
+                break;
+            case '2':
+                col = greyBackground;
+                if (getButtonColour(tile.textContent) != greenBackground && getButtonColour(tile.textContent) != yellowBackground) {
+                    setButtonColour(tile.textContent, col);
+                }
+                break;
+            default:
+                break;
+        }
+        setTileColour(tile, col);
 
-            pos += 1;
-            if (pos == 6) {
-                clearInterval(greenInterval);
+        pos += 1;
+        // We have displayed all the letters
+        if (pos == 6) {
+            clearInterval(greenInterval);
 
+            // We have a winner :o)
+            if (data_dict["correct"]) {
                 setTimeout(function () {
                     var modal = document.getElementById("youWinModal");
                     modal.style.display = "block";
-                }, 400);
+                }, 300);
 
                 round = 7;  // End the game
             }
-        }, 250, pos, round);
-    } else {
-        for (let i = 1; i < 6; i++) {
-            tile = getTile(round - 1, i);
-            switch (data_dict["result"][i - 1]) {
-                case '0':
-                    col = greenBackground;
-                    setButtonColour(tile.textContent, col);
-                    break;
-                case '1':
-                    col = yellowBackground;
-                    if (getButtonColour(tile.textContent) != greenBackground) {
-                        setButtonColour(tile.textContent, col);
-                    }
-                    break;
-                case '2':
-                    col = greyBackground;
-                    if (getButtonColour(tile.textContent) != greenBackground && getButtonColour(tile.textContent) != yellowBackground) {
-                        setButtonColour(tile.textContent, col);
-                    }
-                    break;
-                default:
-                    break;
+            else {
+                // We have a loser :o(
+                if (round == 7) {
+                    alert("Bad luck! Word was " + currentWord)
+                }
             }
-            setTileColour(tile, col);
         }
-        if (round == 7) {
-            alert("Bad luck! Word was " + currentWord)
-        }
-    }
-
+    }, 200, pos, round);
 }
 
 
@@ -211,6 +199,14 @@ function enter() {
 
         checkGuess(guess)
     }
+}
+function touchEnter() {
+    if (!isTouchDevice()) {
+        enter();
+    }
+}
+function inputEnter() {
+    enter();
 }
 
 

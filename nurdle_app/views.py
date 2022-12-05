@@ -16,17 +16,20 @@ def index(request):
 
 @csrf_exempt
 def check_guess(request):
+    # The javascript client has sent us a 'guess'.
     guess = request.body.decode('UTF-8')
     letter_colours = ''
 
+    # First check the guess to see if it is the code to initialize a new word
     if (guess == '0init'):
         init_word()
     else:
-        letter_colours = mark_guess(guess)
+        letter_colours = assess_guess(guess)
 
+    # Populate and send a reply
     data = {
         "is a word": word_in_file(guess),
-        "correct": correct_guess(guess),
+        "correct": is_correct_guess(guess),
         "result": letter_colours,
         "current word": get_current_word()
     }

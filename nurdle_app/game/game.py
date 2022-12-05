@@ -47,17 +47,17 @@ def get_current_word():
     return current_word
 
 
-def correct_guess(guess):
+def is_correct_guess(guess):
     if guess == current_word:
         return True
 
     return False
 
 
-def mark_guess(guess):
+def assess_guess(guess):
     temp_word = list(current_word)
 
-    if correct_guess(guess):
+    if is_correct_guess(guess):
         letter_colours = GREEN * 5
         return letter_colours
 
